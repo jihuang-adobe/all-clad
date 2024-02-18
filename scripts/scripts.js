@@ -16,6 +16,13 @@ import {
 const LCP_BLOCKS = []; // add your LCP blocks to the list
 
 /**
+ * helper function to generate uuid
+ */
+export function generateUUID() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+/**
  * Builds hero block and prepends to main in a new section.
  * @param {Element} main The container element
  */
