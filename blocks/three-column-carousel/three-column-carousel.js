@@ -2,9 +2,10 @@ import { generateUUID } from '../../scripts/scripts.js';
 
 export default async function decorate(block) {
   const id = generateUUID();
-  block.classList.add('slide');
+  block.classList.add('carousel', 'slide', 'container');
   block.setAttribute('id', id);
   block.setAttribute('data-bs-ride', 'carousel');
+  //block.setAttribute('data-bs-interval', 'false');
 
   const carouselItems = block.querySelectorAll(':scope > div');
   carouselItems.forEach((carouselItem, index) => {
@@ -14,15 +15,25 @@ export default async function decorate(block) {
       carouselItem.classList.add('active');
     }
 
-    const carouselItemImages = carouselItem.querySelectorAll('picture');
-    carouselItemImages.forEach((carouselItemImage) => {
-      carouselItemImage.classList.add('d-block', 'w-100');
-    });
+    const carouselItemRow = document.createElement('div');
+    carouselItemRow.classList.add('row');
 
-    const carouselItemCaption = carouselItem.querySelectorAll(':scope > div')[1];
-    if(carouselItemCaption) {
-      carouselItemCaption.classList.add('carousel-caption');
-    }
+    const carouselItemColumns = carouselItem.querySelectorAll(':scope > div');
+
+    carouselItemRow.append(...carouselItemColumns);
+    carouselItem.append(carouselItemRow)
+
+    carouselItemColumns.forEach((carouselItemColumn) => {
+      carouselItemColumn.classList.add('col-lg-4', 'p-5', 'text-center');
+
+      const carouselItemPicture = carouselItemColumn.querySelector('picture');
+      const carouselItemAnchor = carouselItemColumn.querySelector('a');
+
+      if(carouselItemAnchor) {
+        carouselItemAnchor.innerHTML = '';
+        carouselItemAnchor.append(carouselItemPicture);
+      }
+    });
   });
 
   const carouselInner = document.createElement('div');
